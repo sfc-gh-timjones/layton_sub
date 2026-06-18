@@ -11,9 +11,20 @@ const stadiaKey = import.meta.env.VITE_STADIA_API_KEY as string | undefined;
 
 function stadiaUrl(): string {
   const base = "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg";
-  if (!stadiaKey) return base;
   const sep = base.includes("?") ? "&" : "?";
-  return `${base}${sep}api_key=${encodeURIComponent(stadiaKey)}`;
+  return `${base}${sep}api_key=${encodeURIComponent(stadiaKey!)}`;
+}
+
+/** Free satellite fallback — no API key (used on GitHub Pages when secrets are unset). */
+function esriWorldImagery(): MapImageryLayer {
+  return {
+    label: "Esri World Imagery",
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    attribution:
+      "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, USDA FSA, USGS, AeroGRID, IGN, IGP, and the GIS User Community",
+    maxNativeZoom: 19,
+    maxZoom: 21,
+  };
 }
 
 /** Best available imagery for Layton parcel review. */
@@ -29,12 +40,16 @@ export function getMapImageryLayer(): MapImageryLayer {
     };
   }
 
-  return {
-    label: "Stadia Alidade Satellite",
-    url: stadiaUrl(),
-    attribution:
-      '© CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | © <a href="https://stadiamaps.com/">Stadia Maps</a>',
-    maxNativeZoom: 20,
-    maxZoom: 20,
-  };
+  if (stadiaKey) {
+    return {
+      label: "Stadia Alidade Satellite",
+      url: stadiaUrl(),
+      attribution:
+        '© CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | © <a href="https://stadiamaps.com/">Stadia Maps</a>',
+      maxNativeZoom: 20,
+      maxZoom: 20,
+    };
+  }
+
+  return esriWorldImagery();
 }

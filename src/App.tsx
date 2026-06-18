@@ -150,7 +150,6 @@ export default function App() {
             {activeFilterCount(parcelFilters) > 0 ? (
               <span className="stat stat-filtered">{activeFilterCount(parcelFilters)} filters on</span>
             ) : null}
-            <span className="stat">exported {data.exportedAt}</span>
           </div>
           <div className="sidebar-tabs">
             <button

@@ -13,6 +13,7 @@ export function ParcelList({ parcels, selectedId, onSelect }: Props) {
       {parcels.map((p) => {
         const tk = tierKey(p.tier);
         const acreage = toNum(p.acreage);
+        const generalPlan = p.stats.generalPlan?.trim();
         return (
           <button
             key={p.parcelId}
@@ -20,17 +21,25 @@ export function ParcelList({ parcels, selectedId, onSelect }: Props) {
             className={`parcel-item${p.parcelId === selectedId ? " active" : ""}`}
             onClick={() => onSelect(p.parcelId)}
           >
-            <div className="parcel-item-id">
-              #{p.parcelId}
-              <span className={`tag tag-tier-${tk}`}>{tierLabel(p.tier)}</span>
-              {p.totalScore != null && (
-                <span className="tag tag-score">Score {p.totalScore}</span>
-              )}
+            <div className="parcel-item-header">
+              <div className="parcel-item-id">
+                #{p.parcelId}
+                <span className={`tag tag-tier-${tk}`}>{tierLabel(p.tier)}</span>
+              </div>
+              <div className="parcel-item-metrics">
+                {p.totalScore != null ? (
+                  <span className="parcel-item-score">Score {p.totalScore}</span>
+                ) : null}
+                {acreage != null ? (
+                  <span className="parcel-item-acreage">{acreage.toFixed(2)} ac</span>
+                ) : null}
+              </div>
             </div>
             <div className="parcel-item-address">{p.address || "No address"}</div>
-            {acreage != null ? (
-              <div className="parcel-item-meta">{acreage.toFixed(2)} ac</div>
-            ) : null}
+            <div className="parcel-item-plan">
+              <span className="parcel-item-plan-label">General Plan zoning</span>
+              <span className="parcel-item-plan-value">{generalPlan || "—"}</span>
+            </div>
           </button>
         );
       })}

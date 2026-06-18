@@ -13,15 +13,19 @@ Open http://localhost:5176
 
 ### Map imagery (optional)
 
-Create `.env` in this directory (not committed):
+Create `.env` in this directory (not committed) for high-resolution Utah tiles locally:
 
 ```env
 VITE_UTAH_DISCOVER_KEY=your_utah_agrc_key
-# or
+```
+
+Optional Stadia key (requires authentication — do not use without a key):
+
+```env
 VITE_STADIA_API_KEY=your_stadia_key
 ```
 
-Same tiles and resolution as local dev. Without a key, Stadia satellite is used (may be rate-limited).
+**GitHub Pages:** add `VITE_UTAH_DISCOVER_KEY` as a repo secret to match local Utah imagery. Without secrets, the site uses Esri World Imagery (free, no key required).
 
 ## Refresh parcel data
 
