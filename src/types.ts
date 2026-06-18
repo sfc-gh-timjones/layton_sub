@@ -81,6 +81,11 @@ export interface ParcelStats {
   aiPhysicalConstraints: string | null;
   aiSubdivisionFeasibility: string | null;
   generalPlan: string | null;
+  currentZone: string | null;
+  zoneGeneralDescription: string | null;
+  zoneDetailedDescription: string | null;
+  ownerName: string | null;
+  ownerIsEntity: boolean | null;
   acreage: number | null;
 }
 

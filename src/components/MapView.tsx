@@ -22,6 +22,7 @@ interface Props {
   parcel: ScoredParcel;
   showBuildingOverlays: boolean;
   onToggleBuildingOverlays: () => void;
+  onParcelClick?: () => void;
 }
 
 function isAreaGeometry(geom: Geometry | undefined): geom is Geometry {
@@ -119,7 +120,7 @@ type SetbackSpec = {
   dashArray?: string;
 };
 
-export function MapView({ parcel, showBuildingOverlays, onToggleBuildingOverlays }: Props) {
+export function MapView({ parcel, showBuildingOverlays, onToggleBuildingOverlays, onParcelClick }: Props) {
   const imagery = getMapImageryLayer();
   const color = TIER_COLORS[tierKey(parcel.tier)];
 
@@ -305,6 +306,9 @@ export function MapView({ parcel, showBuildingOverlays, onToggleBuildingOverlays
             weight: 3,
             fillColor: color,
             fillOpacity: 0.25,
+          }}
+          eventHandlers={{
+            click: () => onParcelClick?.(),
           }}
         />
         {showBuildingOverlays && buildingFeature ? (

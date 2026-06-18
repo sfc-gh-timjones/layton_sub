@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { formatTopReason } from "./reasonStats";
 import type { ScoredParcel, ScoredTierData, TierFilter } from "./types";
+import { MapPropertyCard } from "./components/MapPropertyCard";
+import { MapZoningRegulationsCard } from "./components/MapZoningRegulationsCard";
 import { MapView } from "./components/MapView";
 import { ParcelFilters } from "./components/ParcelFilters";
 import { ParcelList } from "./components/ParcelList";
@@ -13,6 +15,7 @@ import {
   type SidebarPanel,
 } from "./filters";
 import "./App.css";
+import type { ZoningRegulationsData } from "./zoningRegulations";
 
 export default function App() {
   const [data, setData] = useState<ScoredTierData | null>(null);
@@ -24,6 +27,9 @@ export default function App() {
   const [sidebarPanel, setSidebarPanel] = useState<SidebarPanel>("parcels");
   const [parcelFilters, setParcelFilters] = useState<ParcelFilterState>(DEFAULT_PARCEL_FILTERS);
   const [showBuildingOverlays, setShowBuildingOverlays] = useState(true);
+  const [propertyCardOpen, setPropertyCardOpen] = useState(true);
+  const [showZoningRegulations, setShowZoningRegulations] = useState(false);
+  const [zoningRegulations, setZoningRegulations] = useState<ZoningRegulationsData | null>(null);
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}data/tiers.json`)
@@ -37,6 +43,11 @@ export default function App() {
       })
       .catch((e: Error) => setError(e.message))
       .finally(() => setLoading(false));
+
+    fetch(`${import.meta.env.BASE_URL}data/zoning_regulations.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json: ZoningRegulationsData | null) => setZoningRegulations(json))
+      .catch(() => setZoningRegulations(null));
   }, []);
 
   const filterMatched = useMemo(() => {
@@ -79,6 +90,10 @@ export default function App() {
       setSelectedId(selected.parcelId);
     }
   }, [selected, selectedId]);
+
+  useEffect(() => {
+    setPropertyCardOpen(true);
+  }, [selected?.parcelId]);
 
   const goPrev = () => {
     if (selectedIndex > 0) setSelectedId(filtered[selectedIndex - 1].parcelId);
@@ -144,6 +159,13 @@ export default function App() {
                 Tier {t} ({counts[t]})
               </button>
             ))}
+            <button
+              type="button"
+              className={`zoning-regs-toggle${showZoningRegulations ? " active" : ""}`}
+              onClick={() => setShowZoningRegulations((v) => !v)}
+            >
+              {showZoningRegulations ? "Hide zoning regs" : "See zoning regs"}
+            </button>
           </div>
           <div className="stats">
             <span className="stat">{filtered.length} shown</span>
@@ -193,13 +215,9 @@ export default function App() {
                 parcel={selected}
                 showBuildingOverlays={showBuildingOverlays}
                 onToggleBuildingOverlays={() => setShowBuildingOverlays((v) => !v)}
+                onParcelClick={() => setPropertyCardOpen(true)}
               />
-              <div className="map-overlay">
-                <h2>{selected.address || "No address"}</h2>
-                <p>
-                  Parcel {selected.parcelId}
-                  {selected.totalScore != null ? ` · Score ${selected.totalScore}` : ""}
-                </p>
+              <div className="map-nav-overlay">
                 <div className="nav-row">
                   <button type="button" onClick={goPrev} disabled={selectedIndex <= 0}>
                     ← Prev
@@ -213,6 +231,10 @@ export default function App() {
                   </button>
                 </div>
               </div>
+              {propertyCardOpen ? <MapPropertyCard parcel={selected} /> : null}
+              {showZoningRegulations ? (
+                <MapZoningRegulationsCard parcel={selected} regulations={zoningRegulations} />
+              ) : null}
             </div>
             <div className="detail-column">
               <ScoreDetail parcel={selected} rules={data.rules} />

@@ -14,6 +14,7 @@ export function ParcelList({ parcels, selectedId, onSelect }: Props) {
         const tk = tierKey(p.tier);
         const acreage = toNum(p.acreage);
         const generalPlan = p.stats.generalPlan?.trim();
+        const currentZone = p.stats.currentZone?.trim();
         return (
           <button
             key={p.parcelId}
@@ -36,9 +37,15 @@ export function ParcelList({ parcels, selectedId, onSelect }: Props) {
               </div>
             </div>
             <div className="parcel-item-address">{p.address || "No address"}</div>
-            <div className="parcel-item-plan">
-              <span className="parcel-item-plan-label">General Plan zoning</span>
-              <span className="parcel-item-plan-value">{generalPlan || "—"}</span>
+            <div className="parcel-item-zoning-row">
+              <div className="parcel-item-plan">
+                <span className="parcel-item-plan-label">General Plan</span>
+                <span className="parcel-item-plan-value">{generalPlan || "—"}</span>
+              </div>
+              <div className="parcel-item-plan">
+                <span className="parcel-item-plan-label">Current zoning</span>
+                <span className="parcel-item-plan-value">{currentZone || "—"}</span>
+              </div>
             </div>
           </button>
         );

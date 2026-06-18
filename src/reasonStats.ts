@@ -62,7 +62,7 @@ export function reasonStatSuffix(ruleCode: string, stats: ParcelStats): string |
     }
     case "BLDG_FOOTPRINT_SQFT": {
       const sqft = toNum(stats.totalBldgAreaSqft);
-      return sqft != null && sqft > 0 ? `${fmtSqft(sqft)} footprint` : null;
+      return sqft != null && sqft > 0 ? `${fmtSqft(sqft)} building footprint` : null;
     }
     case "BLDG_COVERAGE_RATIO":
       return formatLandBuildingCoverage(stats.bldgCoverageRatio);
