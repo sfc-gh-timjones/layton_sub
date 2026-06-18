@@ -28,7 +28,7 @@ export default function App() {
   const [parcelFilters, setParcelFilters] = useState<ParcelFilterState>(DEFAULT_PARCEL_FILTERS);
   const [showBuildingOverlays, setShowBuildingOverlays] = useState(true);
   const [propertyCardOpen, setPropertyCardOpen] = useState(true);
-  const [showZoningRegulations, setShowZoningRegulations] = useState(false);
+  const [showZoningRegulations, setShowZoningRegulations] = useState(true);
   const [zoningRegulations, setZoningRegulations] = useState<ZoningRegulationsData | null>(null);
 
   useEffect(() => {

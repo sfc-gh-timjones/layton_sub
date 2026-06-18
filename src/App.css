@@ -83,16 +83,22 @@
 
 .zoning-regs-toggle {
   margin-left: auto;
-  background: #fef9c3;
-  border-color: #eab308;
-  color: #713f12;
+  background: #2563eb;
+  border-color: #1d4ed8;
+  color: #fff;
   font-weight: 700;
 }
 
+.zoning-regs-toggle:hover {
+  background: #1d4ed8;
+  border-color: #1e40af;
+  color: #fff;
+}
+
 .zoning-regs-toggle.active {
-  background: #facc15;
-  border-color: #ca8a04;
-  color: #422006;
+  background: #1e40af;
+  border-color: #1e3a8a;
+  color: #fff;
 }
 
 .tag {
