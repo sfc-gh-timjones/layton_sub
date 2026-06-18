@@ -298,9 +298,24 @@
 
 .parcel-item-zoning-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.55fr);
+  gap: 10px;
   margin-top: 2px;
+}
+
+.parcel-item-plan-general .parcel-item-plan-value {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.parcel-item-plan-zoning {
+  padding-left: 10px;
+  border-left: 1px solid #e2e8f0;
 }
 
 .parcel-item-plan {
@@ -520,6 +535,50 @@
   margin: 0;
   display: grid;
   gap: 6px;
+}
+
+.map-property-subdivision {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.map-property-subdivision h4 {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.map-property-card-row-emphasis dd {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #1d4ed8;
+}
+
+.map-property-subdivision-note {
+  margin: 6px 0 0;
+  font-size: 0.66rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.map-zoning-official {
+  margin: 0 0 6px;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.map-zoning-official a {
+  color: #1d4ed8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.map-zoning-official a:hover {
+  text-decoration: underline;
 }
 
 .map-property-card-row {

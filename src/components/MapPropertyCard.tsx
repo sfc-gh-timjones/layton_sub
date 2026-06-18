@@ -1,8 +1,14 @@
 import type { ScoredParcel } from "../types";
 import { toNum } from "../types";
+import {
+  computeSubdivisionMath,
+  lookupZoneRegulations,
+  type ZoningRegulationsData,
+} from "../zoningRegulations";
 
 interface Props {
   parcel: ScoredParcel;
+  regulations: ZoningRegulationsData | null;
 }
 
 function formatBool(value: boolean | null | undefined, yes = "Yes", no = "No"): string {
@@ -17,12 +23,18 @@ function formatNumber(value: number | null | undefined): string {
   return n.toLocaleString();
 }
 
-export function MapPropertyCard({ parcel }: Props) {
+export function MapPropertyCard({ parcel, regulations }: Props) {
   const { stats } = parcel;
   const acreage = toNum(parcel.acreage ?? stats.acreage);
+  const zoneRows = lookupZoneRegulations(regulations, stats.currentZone);
+  const subdivision = computeSubdivisionMath(acreage, zoneRows);
 
   const rows: { label: string; value: string }[] = [
     { label: "Acreage", value: acreage != null ? `${acreage.toFixed(2)} ac` : "—" },
+    {
+      label: "Parcel size",
+      value: subdivision ? `${formatNumber(subdivision.parcelSqft)} sq ft` : "—",
+    },
     { label: "Building size", value: stats.buildingSqft != null ? `${formatNumber(stats.buildingSqft)} sq ft` : "—" },
     { label: "Year built", value: stats.builtYear != null ? String(stats.builtYear) : "—" },
     {
@@ -64,6 +76,31 @@ export function MapPropertyCard({ parcel }: Props) {
           </div>
         ))}
       </dl>
+
+      <section className="map-property-subdivision">
+        <h4>Subdivision math</h4>
+        <dl className="map-property-card-grid">
+          <div className="map-property-card-row">
+            <dt>Min lot (zoning)</dt>
+            <dd>{subdivision?.minLotLabel ?? "—"}</dd>
+          </div>
+          <div className="map-property-card-row map-property-card-row-emphasis">
+            <dt>Lots that could fit</dt>
+            <dd>
+              {subdivision?.lotsPossible != null
+                ? `${subdivision.lotsPossible} lot${subdivision.lotsPossible === 1 ? "" : "s"}`
+                : "—"}
+            </dd>
+          </div>
+        </dl>
+        {subdivision?.minLotSqft != null && subdivision.lotsPossible != null ? (
+          <p className="map-property-subdivision-note">
+            {formatNumber(subdivision.parcelSqft)} sq ft ÷ {formatNumber(subdivision.minLotSqft)} sq ft
+            {" = "}
+            {subdivision.lotsPossible}
+          </p>
+        ) : null}
+      </section>
     </div>
   );
 }

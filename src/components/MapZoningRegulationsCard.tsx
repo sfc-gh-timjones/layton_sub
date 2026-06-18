@@ -1,6 +1,7 @@
 import type { ScoredParcel } from "../types";
 import {
   groupRegulations,
+  LAYTON_MUNICIPAL_CODE_URL,
   lookupZoneRegulations,
   normalizeRegulationZone,
   type ZoningRegulationsData,
@@ -21,6 +22,12 @@ export function MapZoningRegulationsCard({ parcel, regulations }: Props) {
     <div className="map-zoning-card">
       <div className="map-zoning-card-header">
         <h3>Zoning regulations</h3>
+        <p className="map-zoning-official">
+          Official source:{" "}
+          <a href={LAYTON_MUNICIPAL_CODE_URL} target="_blank" rel="noopener noreferrer">
+            Layton Municipal Code 19.05
+          </a>
+        </p>
         <p>
           {zone ? (
             <>

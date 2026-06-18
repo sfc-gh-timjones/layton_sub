@@ -231,7 +231,9 @@ export default function App() {
                   </button>
                 </div>
               </div>
-              {propertyCardOpen ? <MapPropertyCard parcel={selected} /> : null}
+              {propertyCardOpen ? (
+                <MapPropertyCard parcel={selected} regulations={zoningRegulations} />
+              ) : null}
               {showZoningRegulations ? (
                 <MapZoningRegulationsCard parcel={selected} regulations={zoningRegulations} />
               ) : null}

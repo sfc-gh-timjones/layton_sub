@@ -15,6 +15,11 @@ const ZONE_ALIASES: Record<string, string> = {
   PB: "P-B",
 };
 
+export const LAYTON_MUNICIPAL_CODE_URL =
+  "https://hosting.civiclinq.com/layton/books/municipal-code/19.05.000";
+
+export const SQFT_PER_ACRE = 43560;
+
 const CATEGORY_ORDER = [
   "LOT SIZE",
   "PRINCIPLE STRUCTURE SETBACKS",
@@ -74,4 +79,57 @@ export function groupRegulations(rows: ZoningRegulationRow[]): { category: strin
       category: CATEGORY_LABELS[category] ?? category,
       items,
     }));
+}
+
+export function parseMinLotAreaSqft(rows: ZoningRegulationRow[]): number | null {
+  const row = rows.find(
+    (r) =>
+      r.regulation.startsWith("Min. Lot Area 1st Dwelling") || r.regulation === "Min. Lot Area",
+  );
+  if (!row?.value) return null;
+
+  const value = row.value.trim();
+  const acreMatch = value.match(/([\d,.]+)\s*Acres?/i);
+  if (acreMatch) {
+    const acres = Number(acreMatch[1].replace(/,/g, ""));
+    return Number.isFinite(acres) && acres > 0 ? acres * SQFT_PER_ACRE : null;
+  }
+
+  const sqftMatch = value.match(/([\d,.]+)\s*s\/f/i);
+  if (sqftMatch) {
+    const sqft = Number(sqftMatch[1].replace(/,/g, ""));
+    return Number.isFinite(sqft) && sqft > 0 ? sqft : null;
+  }
+
+  return null;
+}
+
+export interface SubdivisionMath {
+  parcelSqft: number;
+  minLotSqft: number | null;
+  minLotLabel: string | null;
+  lotsPossible: number | null;
+}
+
+export function computeSubdivisionMath(
+  acreage: number | null | undefined,
+  zoneRows: ZoningRegulationRow[],
+): SubdivisionMath | null {
+  if (acreage == null || acreage <= 0) return null;
+
+  const parcelSqft = acreage * SQFT_PER_ACRE;
+  const minRow = zoneRows.find(
+    (r) =>
+      r.regulation.startsWith("Min. Lot Area 1st Dwelling") || r.regulation === "Min. Lot Area",
+  );
+  const minLotSqft = parseMinLotAreaSqft(zoneRows);
+  const lotsPossible =
+    minLotSqft != null && minLotSqft > 0 ? Math.floor(parcelSqft / minLotSqft) : null;
+
+  return {
+    parcelSqft,
+    minLotSqft,
+    minLotLabel: minRow?.value ?? null,
+    lotsPossible,
+  };
 }

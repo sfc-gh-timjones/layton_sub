@@ -38,11 +38,11 @@ export function ParcelList({ parcels, selectedId, onSelect }: Props) {
             </div>
             <div className="parcel-item-address">{p.address || "No address"}</div>
             <div className="parcel-item-zoning-row">
-              <div className="parcel-item-plan">
+              <div className="parcel-item-plan parcel-item-plan-general">
                 <span className="parcel-item-plan-label">General Plan</span>
                 <span className="parcel-item-plan-value">{generalPlan || "—"}</span>
               </div>
-              <div className="parcel-item-plan">
+              <div className="parcel-item-plan parcel-item-plan-zoning">
                 <span className="parcel-item-plan-label">Current zoning</span>
                 <span className="parcel-item-plan-value">{currentZone || "—"}</span>
               </div>
