@@ -152,6 +152,17 @@ export function reasonStatSuffix(ruleCode: string, stats: ParcelStats): string |
     }
     case "GENERAL_PLAN":
       return stats.generalPlan?.trim() ?? null;
+    case "SUBDIVISION_MATH": {
+      const additional = toNum(stats.zoningAdditionalLots);
+      const fits = toNum(stats.zoningLotsThatFit);
+      if (additional != null && additional >= 0) {
+        const parts = [`${additional} additional lot${additional === 1 ? "" : "s"}`];
+        if (fits != null) parts.push(`${fits} fit by area`);
+        if (stats.zoningMinLotLabel?.trim()) parts.push(`min ${stats.zoningMinLotLabel.trim()}`);
+        return parts.join(", ");
+      }
+      return null;
+    }
     case "PARCEL_SIZE": {
       const ac = toNum(stats.acreage);
       return ac != null && ac > 0 ? `${ac.toFixed(2)} ac` : null;

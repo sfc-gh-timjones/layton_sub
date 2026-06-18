@@ -51,6 +51,7 @@ export interface ParcelScores {
   aiSubdivision: number | null;
   largeHomeFilter: number | null;
   generalPlan: number | null;
+  subdivisionMath: number | null;
 }
 
 export interface ParcelStats {
@@ -86,6 +87,10 @@ export interface ParcelStats {
   zoneDetailedDescription: string | null;
   ownerName: string | null;
   ownerIsEntity: boolean | null;
+  zoningLotsThatFit: number | null;
+  zoningAdditionalLots: number | null;
+  zoningMinLotSqft: number | null;
+  zoningMinLotLabel: string | null;
   acreage: number | null;
 }
 

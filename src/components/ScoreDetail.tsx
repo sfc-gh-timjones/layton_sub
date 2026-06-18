@@ -44,6 +44,7 @@ const SCORE_KEY_TO_RULE: Record<string, string> = {
   aiSubdivision: "AI_SUBDIVISION",
   largeHomeFilter: "LARGE_HOME_FILTER",
   generalPlan: "GENERAL_PLAN",
+  subdivisionMath: "SUBDIVISION_MATH",
 };
 
 export function ScoreDetail({ parcel, rules }: Props) {
