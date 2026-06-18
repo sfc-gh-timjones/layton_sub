@@ -294,9 +294,9 @@ export function MapView({ parcel, showBuildingOverlays, onToggleBuildingOverlays
           url={imagery.url}
           maxNativeZoom={imagery.maxNativeZoom}
           maxZoom={imagery.maxZoom}
-          detectRetina
+          detectRetina={imagery.detectRetina ?? false}
         />
-        <FitBounds bounds={bounds} maxZoom={imagery.maxZoom} />
+        <FitBounds bounds={bounds} maxZoom={imagery.maxNativeZoom} />
         <GeoJSON
           key={`parcel-${parcel.parcelId}`}
           data={parcelFeature}

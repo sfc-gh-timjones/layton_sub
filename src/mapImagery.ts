@@ -4,6 +4,8 @@ export interface MapImageryLayer {
   maxNativeZoom: number;
   maxZoom: number;
   label: string;
+  /** When false, avoids requesting tiles above maxNativeZoom on retina displays. */
+  detectRetina?: boolean;
 }
 
 const utahKey = import.meta.env.VITE_UTAH_DISCOVER_KEY as string | undefined;
@@ -23,7 +25,8 @@ function esriWorldImagery(): MapImageryLayer {
     attribution:
       "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, USDA FSA, USGS, AeroGRID, IGN, IGP, and the GIS User Community",
     maxNativeZoom: 19,
-    maxZoom: 21,
+    maxZoom: 19,
+    detectRetina: false,
   };
 }
 
@@ -37,6 +40,7 @@ export function getMapImageryLayer(): MapImageryLayer {
         '&copy; <a href="https://gis.utah.gov/products/discover/">Utah AGRC Discover</a>',
       maxNativeZoom: 21,
       maxZoom: 21,
+      detectRetina: true,
     };
   }
 
@@ -48,6 +52,7 @@ export function getMapImageryLayer(): MapImageryLayer {
         '© CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | © <a href="https://stadiamaps.com/">Stadia Maps</a>',
       maxNativeZoom: 20,
       maxZoom: 20,
+      detectRetina: true,
     };
   }
 
