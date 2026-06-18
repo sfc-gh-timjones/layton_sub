@@ -10,9 +10,10 @@ import {
 interface Props {
   parcel: ScoredParcel;
   regulations: ZoningRegulationsData | null;
+  onHide: () => void;
 }
 
-export function MapZoningRegulationsCard({ parcel, regulations }: Props) {
+export function MapZoningRegulationsCard({ parcel, regulations, onHide }: Props) {
   const zone = parcel.stats.currentZone?.trim() || null;
   const zoneKey = normalizeRegulationZone(zone);
   const rows = lookupZoneRegulations(regulations, zone);
@@ -21,7 +22,12 @@ export function MapZoningRegulationsCard({ parcel, regulations }: Props) {
   return (
     <div className="map-zoning-card">
       <div className="map-zoning-card-header">
-        <h3>Zoning regulations</h3>
+        <div className="map-zoning-card-title-row">
+          <h3>Zoning regulations</h3>
+          <button type="button" className="map-overlay-toggle" onClick={onHide}>
+            Hide zoning regs
+          </button>
+        </div>
         <p className="map-zoning-official">
           Official source:{" "}
           <a href={LAYTON_MUNICIPAL_CODE_URL} target="_blank" rel="noopener noreferrer">

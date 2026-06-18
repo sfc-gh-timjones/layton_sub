@@ -159,13 +159,6 @@ export default function App() {
                 Tier {t} ({counts[t]})
               </button>
             ))}
-            <button
-              type="button"
-              className={`zoning-regs-toggle${showZoningRegulations ? " active" : ""}`}
-              onClick={() => setShowZoningRegulations((v) => !v)}
-            >
-              {showZoningRegulations ? "Hide zoning regs" : "See zoning regs"}
-            </button>
           </div>
           <div className="stats">
             <span className="stat">{filtered.length} shown</span>
@@ -235,8 +228,20 @@ export default function App() {
                 <MapPropertyCard parcel={selected} regulations={zoningRegulations} />
               ) : null}
               {showZoningRegulations ? (
-                <MapZoningRegulationsCard parcel={selected} regulations={zoningRegulations} />
-              ) : null}
+                <MapZoningRegulationsCard
+                  parcel={selected}
+                  regulations={zoningRegulations}
+                  onHide={() => setShowZoningRegulations(false)}
+                />
+              ) : (
+                <button
+                  type="button"
+                  className="map-zoning-toggle-fab map-overlay-toggle"
+                  onClick={() => setShowZoningRegulations(true)}
+                >
+                  See zoning regs
+                </button>
+              )}
             </div>
             <div className="detail-column">
               <ScoreDetail parcel={selected} rules={data.rules} />
